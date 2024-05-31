@@ -6,6 +6,7 @@ target/
 ### IntelliJ IDEA ###
 .idea
 
+spring-shell.log
 
 ### Mac OS ###
 .DS_Store
