@@ -1,4 +1,4 @@
-package io.github.busy_spin.fix_protocol_showcase;
+package io.github.busy_spin.fix_showcase;
 
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
