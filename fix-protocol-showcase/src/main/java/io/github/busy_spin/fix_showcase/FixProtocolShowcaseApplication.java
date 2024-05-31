@@ -26,7 +26,7 @@ public class FixProtocolShowcaseApplication {
 		return new PromptProvider() {
 			@Override
 			public AttributedString getPrompt() {
-				return new AttributedString("$>");
+				return new AttributedString("fix-shell>");
 			}
 		};
 	}

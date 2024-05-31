@@ -13,4 +13,10 @@ public class InitiatorCommands {
         return "Starting " + sessionId;
     }
 
+    @ShellMethod(key = "start-acceptor")
+    public String startAcceptor(@ShellOption String sessionId) {
+        new FixInitiatorHelper().startAcceptor();
+        return "Starting " + sessionId;
+    }
+
 }
