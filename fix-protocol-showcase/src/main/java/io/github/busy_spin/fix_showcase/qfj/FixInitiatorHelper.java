@@ -1,8 +1,14 @@
 package io.github.busy_spin.fix_showcase.qfj;
 
+import io.github.busy_spin.fix_showcase.qfj.utils.NoopLogFactory;
+import io.github.busy_spin.fix_showcase.qfj.utils.QueuingLogFactory;
+import lombok.Getter;
 import quickfix.*;
 
 public class FixInitiatorHelper {
+
+    @Getter
+    private QueuingLogFactory logFactory = new QueuingLogFactory();
 
     public boolean start() {
         try {
@@ -30,46 +36,13 @@ public class FixInitiatorHelper {
                     new InitiatorApplication(),
                     new NoopStoreFactory(),
                     sessionSettings,
-                    new NoopLogFactory(),
+                    logFactory,
                     new DefaultMessageFactory());
             socketAcceptor.start();
             return true;
         } catch (ConfigError e) {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    public static class NoopLogFactory implements LogFactory {
-
-        @Override
-        public Log create(SessionID sessionID) {
-            return new Log() {
-                @Override
-                public void clear() {
-
-                }
-
-                @Override
-                public void onIncoming(String s) {
-
-                }
-
-                @Override
-                public void onOutgoing(String s) {
-
-                }
-
-                @Override
-                public void onEvent(String s) {
-
-                }
-
-                @Override
-                public void onErrorEvent(String s) {
-
-                }
-            };
         }
     }
 
