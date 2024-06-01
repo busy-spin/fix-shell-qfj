@@ -1,4 +1,4 @@
-package io.github.busy_spin.fix_showcase;
+package io.github.busy_spin.fix_showcase.qfj;
 
 import quickfix.*;
 
