@@ -41,8 +41,7 @@ public class AcceptorCommands {
         ArrayTableModel arrayTableModel = new ArrayTableModel(data);
 
         TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
-                .addHeaderAndVerticalsBorders(BorderStyle.fancy_heavy_double_dash)
-                .addHeaderBorder(BorderStyle.fancy_heavy_double_dash);
+                .addFullBorder(BorderStyle.fancy_heavy);
 
         return tableBuilder.build().render(1000);
 

@@ -18,8 +18,7 @@ public class QueueLog implements Log {
 
     @Override
     public void onIncoming(String s) {
-        String eventId = "INCOMING";
-        recordInQueue(s, eventId);
+        recordInQueue("INCOMING", s);
     }
 
     private void recordInQueue(String s, String eventId) {
