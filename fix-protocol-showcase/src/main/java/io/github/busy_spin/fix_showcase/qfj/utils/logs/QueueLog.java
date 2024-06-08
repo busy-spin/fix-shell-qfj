@@ -1,14 +1,23 @@
-package io.github.busy_spin.fix_showcase.qfj.utils;
+package io.github.busy_spin.fix_showcase.qfj.utils.logs;
 
 import lombok.Getter;
 import quickfix.Log;
+import quickfix.SessionID;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class QueueLog implements Log {
 
     @Getter
-    private final ArrayBlockingQueue<LogElement> queue = new ArrayBlockingQueue<>(500);
+    private final ArrayBlockingQueue<LogElement> queue;
+
+    @Getter
+    private final SessionID sessionID;
+
+    public QueueLog(int capacity, SessionID sessionID) {
+        queue = new ArrayBlockingQueue<>(capacity);
+        this.sessionID = sessionID;
+    }
 
     @Override
     public void clear() {

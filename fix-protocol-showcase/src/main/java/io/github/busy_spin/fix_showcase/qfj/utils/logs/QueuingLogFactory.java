@@ -1,4 +1,4 @@
-package io.github.busy_spin.fix_showcase.qfj.utils;
+package io.github.busy_spin.fix_showcase.qfj.utils.logs;
 
 import lombok.Getter;
 import quickfix.Log;
@@ -15,7 +15,7 @@ public class QueuingLogFactory implements LogFactory {
 
     @Override
     public Log create(SessionID sessionID) {
-        QueueLog queueLog = new QueueLog();
+        QueueLog queueLog = new QueueLog(100, sessionID);
         logs.put(sessionID, queueLog);
         return queueLog;
     }

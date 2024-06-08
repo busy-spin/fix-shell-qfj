@@ -1,0 +1,92 @@
+package io.github.busy_spin.fix_showcase.qfj;
+
+import io.github.busy_spin.fix_showcase.qfj.utils.logs.LogElement;
+import io.github.busy_spin.fix_showcase.qfj.utils.logs.NoopLogFactory;
+import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueueLog;
+import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueuingLogFactory;
+import lombok.Getter;
+import org.springframework.boot.ansi.AnsiColor;
+import org.springframework.boot.ansi.AnsiOutput;
+import org.springframework.shell.table.ArrayTableModel;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
+import quickfix.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class ShellOutPutHelper {
+
+    @Getter
+    private QueuingLogFactory logFactory = new QueuingLogFactory();
+
+    public boolean start() {
+        try {
+            SessionSettings sessionSettings =
+                    new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "initiator.cfg"));
+            SocketInitiator socketInitiator = new SocketInitiator(
+                    new Application(),
+                    new NoopStoreFactory(),
+                    sessionSettings,
+                    new NoopLogFactory(),
+                    new DefaultMessageFactory());
+            socketInitiator.start();
+            return true;
+        } catch (ConfigError e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean startAcceptor() {
+        try {
+            SessionSettings sessionSettings =
+                    new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "acceptor.cfg"));
+            SocketAcceptor socketAcceptor = new SocketAcceptor(
+                    new Application(),
+                    new NoopStoreFactory(),
+                    sessionSettings,
+                    logFactory,
+                    new DefaultMessageFactory());
+            socketAcceptor.start();
+            return true;
+        } catch (ConfigError e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void printLogs(QueuingLogFactory logFactory) {
+        Map<SessionID, QueueLog> sessionLogs = logFactory.getLogs();
+        for (SessionID sessionID : sessionLogs.keySet()) {
+            AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "Session ID" + sessionID.toString(), AnsiColor.DEFAULT);
+            System.out.println("Session ID " + sessionID);
+            List<String[]> rows = new ArrayList<>();
+            rows.add(new String[]{"Event", "Message"});
+
+            QueueLog queueLog = sessionLogs.get(sessionID);
+            for (Object obj : queueLog.getQueue().toArray()) {
+                LogElement element = (LogElement) obj;
+                rows.add(new String[]{element.getType(), element.getMessage()});
+            }
+
+            ArrayTableModel arrayTableModel = new ArrayTableModel(rows.toArray(new String[0][0]));
+            TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
+                    .addFullBorder(BorderStyle.fancy_heavy);
+
+            System.out.println(tableBuilder.build().render(1000));
+        }
+    }
+
+    public void printSessions(Connector connector) {
+        List<String[]> sessions = connector.getSessions().stream().map(id -> new String[]{id.toString()}).toList();
+        ArrayTableModel arrayTableModel = new ArrayTableModel(sessions.toArray(new String[0][0]));
+        TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
+                .addFullBorder(BorderStyle.fancy_heavy);
+
+        System.out.println(tableBuilder.build().render(1000));
+    }
+
+}

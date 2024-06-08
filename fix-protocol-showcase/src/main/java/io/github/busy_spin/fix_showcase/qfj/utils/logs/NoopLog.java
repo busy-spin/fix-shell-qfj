@@ -1,4 +1,4 @@
-package io.github.busy_spin.fix_showcase.qfj.utils;
+package io.github.busy_spin.fix_showcase.qfj.utils.logs;
 
 import quickfix.Log;
 

@@ -2,7 +2,7 @@ package io.github.busy_spin.fix_showcase.qfj;
 
 import quickfix.*;
 
-public class InitiatorApplication implements Application {
+public class Application implements quickfix.Application {
     @Override
     public void onCreate(SessionID sessionID) {
 
