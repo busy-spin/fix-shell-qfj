@@ -61,6 +61,7 @@ public class DefaultInitiatorController implements InitiatorController {
             initiatorLock.lock();
             if (started) {
                 socketInitiator.stop(true);
+                started = false;
             }
         } finally {
             initiatorLock.unlock();
