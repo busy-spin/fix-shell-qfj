@@ -12,10 +12,7 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import quickfix.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class ShellOutPutHelper {
 
@@ -100,7 +97,19 @@ public class ShellOutPutHelper {
         Properties properties = settings.getSessionProperties(new SessionID(sessionId));
         ArrayList<String[]> sessionDetails = new ArrayList<>();
 
+        Properties defaultProperties = settings.getDefaultProperties();
+
+        HashMap<Object, Object> mergeConfigs = new HashMap<>();
+        for (Map.Entry<Object, Object> entry : defaultProperties.entrySet()) {
+            mergeConfigs.put(entry.getKey(), entry.getValue());
+        }
+
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            mergeConfigs.put(entry.getKey(), entry.getValue());
+        }
+
+
+        for (Map.Entry<Object, Object> entry : mergeConfigs.entrySet()) {
             sessionDetails.add(new String[]{entry.getKey().toString(), entry.getValue().toString()});
         }
 

@@ -46,9 +46,6 @@ public class DefaultInitiatorController implements InitiatorController {
         try {
             initiatorLock.lock();
             if (!started) {
-                if (socketInitiator == null) {
-                    init();
-                }
                 socketInitiator.start();
                 started = true;
             }

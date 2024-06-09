@@ -3,6 +3,7 @@ package io.github.busy_spin.fix_showcase.qfj.utils.store;
 import quickfix.*;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +26,9 @@ public class DefaultBaseDirFileStoreFactory implements MessageStoreFactory {
         if (baseDir == null) {
             throw new RuntimeException("No default location for file store.");
         }
+        String storePath = Paths.get(baseDir, ".qfj-fix-shell").toString();
         this.settings = settings;
-        settings.setString(SETTING_FILE_STORE_PATH, baseDir);
+        settings.setString(SETTING_FILE_STORE_PATH, storePath);
         fileStoreFactory = new FileStoreFactory(settings);
     }
 

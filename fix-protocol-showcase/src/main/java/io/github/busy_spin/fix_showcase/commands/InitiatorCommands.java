@@ -11,13 +11,9 @@ public class InitiatorCommands {
 
     private String defaultSession;
 
-
-    @Command(command = "start", description = "initialize the initiator application")
-    public String init() {
+    public InitiatorCommands() {
         defaultInitiatorController.init();
-        return "";
     }
-
 
     @Command(command = "start", description = "initialize the initiator application")
     public String start() {
@@ -81,11 +77,9 @@ public class InitiatorCommands {
     }
 
     @Command(command = "session-details", description = "Print session details")
-    public String sessionDetails(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
-        sessionId = getProvidedOrDefault(sessionId);
-        if (sessionId != null) {
-            defaultInitiatorController.printSessionDetails(sessionId);
-        }
+    public String sessionDetails(
+            @Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
+        defaultInitiatorController.printSessionDetails(getProvidedOrDefault(sessionId));
         return "";
     }
 
