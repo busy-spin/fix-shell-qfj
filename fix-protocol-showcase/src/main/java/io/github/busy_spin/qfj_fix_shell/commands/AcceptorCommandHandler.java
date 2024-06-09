@@ -1,6 +1,6 @@
-package io.github.busy_spin.fix_showcase.commands;
+package io.github.busy_spin.qfj_fix_shell.commands;
 
-import io.github.busy_spin.fix_showcase.qfj.AppType;
+import io.github.busy_spin.qfj_fix_shell.qfj.AppType;
 import org.springframework.shell.command.annotation.Command;
 
 @Command(command = "a", group = "QFJ Acceptor Control")

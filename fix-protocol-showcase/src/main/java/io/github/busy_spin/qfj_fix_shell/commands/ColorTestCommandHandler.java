@@ -1,4 +1,4 @@
-package io.github.busy_spin.fix_showcase.commands;
+package io.github.busy_spin.qfj_fix_shell.commands;
 
 import org.springframework.shell.command.annotation.Command;
 

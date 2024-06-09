@@ -1,8 +1,8 @@
-package io.github.busy_spin.fix_showcase.qfj;
+package io.github.busy_spin.qfj_fix_shell.qfj;
 
-import io.github.busy_spin.fix_showcase.qfj.utils.logs.LogElement;
-import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueueLog;
-import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueuingLogFactory;
+import io.github.busy_spin.qfj_fix_shell.qfj.utils.logs.LogElement;
+import io.github.busy_spin.qfj_fix_shell.qfj.utils.logs.QueueLog;
+import io.github.busy_spin.qfj_fix_shell.qfj.utils.logs.QueuingLogFactory;
 import org.springframework.boot.ansi.AnsiColor;
 import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.shell.table.ArrayTableModel;

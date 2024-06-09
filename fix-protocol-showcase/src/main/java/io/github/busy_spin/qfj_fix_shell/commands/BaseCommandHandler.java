@@ -1,8 +1,8 @@
-package io.github.busy_spin.fix_showcase.commands;
+package io.github.busy_spin.qfj_fix_shell.commands;
 
-import io.github.busy_spin.fix_showcase.qfj.AppType;
-import io.github.busy_spin.fix_showcase.qfj.DefaultFixAppLifeCycleController;
-import io.github.busy_spin.fix_showcase.qfj.FixAppLifeCycleController;
+import io.github.busy_spin.qfj_fix_shell.qfj.AppType;
+import io.github.busy_spin.qfj_fix_shell.qfj.DefaultFixAppLifeCycleController;
+import io.github.busy_spin.qfj_fix_shell.qfj.FixAppLifeCycleController;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 

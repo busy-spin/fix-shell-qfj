@@ -1,7 +1,7 @@
-package io.github.busy_spin.fix_showcase.qfj;
+package io.github.busy_spin.qfj_fix_shell.qfj;
 
-import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueuingLogFactory;
-import io.github.busy_spin.fix_showcase.qfj.utils.store.DefaultBaseDirFileStoreFactory;
+import io.github.busy_spin.qfj_fix_shell.qfj.utils.logs.QueuingLogFactory;
+import io.github.busy_spin.qfj_fix_shell.qfj.utils.store.DefaultBaseDirFileStoreFactory;
 import quickfix.*;
 
 import java.io.IOException;

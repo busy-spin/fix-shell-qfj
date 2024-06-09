@@ -1,4 +1,4 @@
-package io.github.busy_spin.fix_showcase.qfj.utils.logs;
+package io.github.busy_spin.qfj_fix_shell.qfj.utils.logs;
 
 public class LogElement {
     private String message;

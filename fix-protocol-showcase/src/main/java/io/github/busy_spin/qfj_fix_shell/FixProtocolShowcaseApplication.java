@@ -1,8 +1,8 @@
-package io.github.busy_spin.fix_showcase;
+package io.github.busy_spin.qfj_fix_shell;
 
-import io.github.busy_spin.fix_showcase.commands.AcceptorCommandHandler;
-import io.github.busy_spin.fix_showcase.commands.ColorTestCommandHandler;
-import io.github.busy_spin.fix_showcase.commands.InitializerCommandHandler;
+import io.github.busy_spin.qfj_fix_shell.commands.AcceptorCommandHandler;
+import io.github.busy_spin.qfj_fix_shell.commands.ColorTestCommandHandler;
+import io.github.busy_spin.qfj_fix_shell.commands.InitializerCommandHandler;
 import org.jline.utils.AttributedString;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
