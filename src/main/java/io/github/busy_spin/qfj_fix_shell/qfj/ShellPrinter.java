@@ -14,42 +14,52 @@ import quickfix.SessionSettings;
 import java.util.*;
 
 public class ShellPrinter {
+    private final AppType appType;
 
+    private final AnsiColor color;
 
-    public void printLogs(QueuingLogFactory logFactory) {
-        Map<SessionID, QueueLog> sessionLogs = logFactory.getLogs();
-        for (SessionID sessionID : sessionLogs.keySet()) {
-            AnsiOutput.toString(AnsiColor.BRIGHT_BLUE,
-                    "Session ID" + sessionID.toString(), AnsiColor.DEFAULT);
-            System.out.println("Session ID " + sessionID);
-            List<String[]> rows = new ArrayList<>();
-            rows.add(new String[]{"Type", "Message"});
-
-            QueueLog queueLog = sessionLogs.get(sessionID);
-            for (Object obj : queueLog.getQueue().toArray()) {
-                LogElement element = (LogElement) obj;
-                rows.add(new String[]{element.getType(), element.getMessage()});
-            }
-
-            ArrayTableModel arrayTableModel = new ArrayTableModel(rows.toArray(new String[0][0]));
-            TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
-                    .addFullBorder(BorderStyle.fancy_heavy);
-
-            System.out.println(tableBuilder.build().render(1000));
+    public ShellPrinter(AppType appType) {
+        this.appType = appType;
+        if (appType == AppType.INITIATOR) {
+            color = AnsiColor.BRIGHT_BLUE;
+        } else {
+            color = AnsiColor.BRIGHT_RED;
         }
+    }
+
+    public void printLogs(QueuingLogFactory logFactory, String sessionId) {
+        SessionID sessionID = new SessionID(sessionId);
+        QueueLog queueLog = logFactory.getLogs().get(sessionID);
+        if (queueLog == null) {
+            return;
+        }
+        printMessage("Session ID " + sessionID);
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"Type", "Message"});
+
+        for (Object obj : queueLog.getQueue().toArray()) {
+            LogElement element = (LogElement) obj;
+            rows.add(new String[]{element.getType(), element.getMessage()});
+        }
+
+        ArrayTableModel arrayTableModel = new ArrayTableModel(rows.toArray(new String[0][0]));
+        TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
+                .addFullBorder(BorderStyle.fancy_heavy);
+
+        printMessage(tableBuilder.build().render(1000));
     }
 
     public void printSessions(SessionSettings settings) {
         ArrayList<String[]> sessions = new ArrayList<>();
         settings.sectionIterator().forEachRemaining(id -> sessions.add(new String[]{id.toString()}));
         if (sessions.isEmpty()) {
-            System.out.println("No sessions found");
+            printMessage("No sessions found");
         } else {
             ArrayTableModel arrayTableModel = new ArrayTableModel(sessions.toArray(new String[0][0]));
             TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
                     .addFullBorder(BorderStyle.fancy_heavy);
 
-            System.out.println(tableBuilder.build().render(1000));
+            printMessage(tableBuilder.build().render(1000));
         }
 
     }
@@ -73,10 +83,10 @@ public class ShellPrinter {
         TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
                 .addFullBorder(BorderStyle.fancy_heavy);
 
-        System.out.println(tableBuilder.build().render(1000));
+        printMessage(tableBuilder.build().render(1000));
     }
 
-    public void printSequenceNumbers(int nextNumIn, int nextNumOut) {
+    public void printSequenceNumbers(int nextNumIn, int nextNumOut, SessionID sessionID) {
         ArrayTableModel arrayTableModel = new ArrayTableModel(new String[][]{
                 new String[]{"NextNumOut", String.valueOf(nextNumOut)},
                 new String[]{"NextNumIn", String.valueOf(nextNumIn)}
@@ -84,6 +94,10 @@ public class ShellPrinter {
         TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
                 .addFullBorder(BorderStyle.fancy_heavy);
 
-        System.out.println(tableBuilder.build().render(1000));
+        printMessage(tableBuilder.build().render(1000));
+    }
+
+    public void printMessage(String print) {
+        System.out.println(AnsiOutput.toString(color, print, AnsiColor.DEFAULT));
     }
 }

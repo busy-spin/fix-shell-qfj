@@ -18,13 +18,14 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
 
     private final QueuingLogFactory logFactory = new QueuingLogFactory();
 
-    private final ShellPrinter shellPrinter = new ShellPrinter();
+    private final ShellPrinter shellPrinter;
 
     private SessionSettings sessionSettings;
 
     private volatile boolean started = false;
 
     public DefaultFixAppLifeCycleController(AppType appType) {
+        shellPrinter = new ShellPrinter(appType);
         init(appType);
     }
 
@@ -107,12 +108,12 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
         if (started) {
             try (Session session = Session.lookupSession(new SessionID(sessionId))) {
                 session.logout();
-                System.out.println("Logout from session " + sessionId);
+                shellPrinter.printMessage("Logout from session " + sessionId);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println("Initiator is not running");
+            shellPrinter.printMessage("Initiator is not running");
         }
     }
 
@@ -124,12 +125,11 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
                     reqId = String.valueOf(System.nanoTime());
                 }
                 session.generateTestRequest(reqId);
-                System.out.printf("Sending test request with req-id %s to %s\n", reqId, sessionId);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println("Initiator is not running");
+            shellPrinter.printMessage("Initiator is not running");
         }
     }
 
@@ -138,30 +138,30 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
         if (started) {
             try (Session session = Session.lookupSession(new SessionID(sessionId))) {
                 session.logon();
-                System.out.println("Logon to session " + sessionId);
+                shellPrinter.printMessage("Logon to session " + sessionId);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println("Initiator is not running");
+            shellPrinter.printMessage("Initiator is not running");
         }
     }
 
     @Override
     public void printLog(String sessionId) {
-        shellPrinter.printLogs(logFactory);
+        shellPrinter.printLogs(logFactory, sessionId);
     }
 
     @Override
     public void setNextNumIn(String sessionId, int number) {
         int currentNextNumIn = messageStoreFactory.setNextNumIn(new SessionID(sessionId), number);
-        System.out.printf("Next Num In changed from %d to %d\n", currentNextNumIn, number);
+        shellPrinter.printMessage("Next Num In changed from " + currentNextNumOut + " to " + number);
     }
 
     @Override
     public void setNextNumOut(String sessionId, int number) {
         int currentNextNumOut = messageStoreFactory.setNextNumOut(new SessionID(sessionId), number);
-        System.out.printf("Next Num Out changed from %d to %d\n", currentNextNumOut, number);
+        shellPrinter.printMessage("Next Num Out changed from " + currentNextNumOut + " to " + number);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
         try {
             shellPrinter.printSessionDetails(sessionSettings, sessionId);
         } catch (Exception e) {
-            System.out.println("Error occurred while reading session config");
+            shellPrinter.printMessage("Error occurred while reading session config");
             throw new RuntimeException(e);
         }
     }
@@ -187,11 +187,10 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
     @Override
     public void printSequenceNumbers(String sessionId) {
         SessionID sessionID = new SessionID(sessionId);
-        System.out.println("Session " + sessionID);
         int nextNumIn = messageStoreFactory.getNextNumIn(sessionID);
         int nextNumOut = messageStoreFactory.getNextNumOut(sessionID);
 
-        shellPrinter.printSequenceNumbers(nextNumIn, nextNumOut);
+        shellPrinter.printSequenceNumbers(nextNumIn, nextNumOut, sessionID);
     }
 
 
