@@ -14,11 +14,11 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
 
     private DefaultBaseDirFileStoreFactory messageStoreFactory;
 
-    private Lock startUpLock = new ReentrantLock();
+    private final Lock startUpLock = new ReentrantLock();
 
-    private QueuingLogFactory logFactory = new QueuingLogFactory();
+    private final QueuingLogFactory logFactory = new QueuingLogFactory();
 
-    private ShellPrinter shellPrinter = new ShellPrinter();
+    private final ShellPrinter shellPrinter = new ShellPrinter();
 
     private SessionSettings sessionSettings;
 
@@ -64,7 +64,7 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
                 started = true;
             }
         } catch (ConfigError e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             startUpLock.unlock();
         }
