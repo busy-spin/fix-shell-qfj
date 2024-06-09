@@ -148,11 +148,6 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
     }
 
     @Override
-    public void sendOrder(String sessionId) {
-
-    }
-
-    @Override
     public void printLog(String sessionId) {
         shellPrinter.printLogs(logFactory);
     }
@@ -182,12 +177,20 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
             System.out.println("Error occurred while reading session config");
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
     public String defaultSession() {
         return sessionSettings.sectionIterator().next().toString();
+    }
+
+    @Override
+    public void printSequenceNumbers(String sessionId) {
+        SessionID sessionID = new SessionID(sessionId);
+        int nextNumIn = messageStoreFactory.getNextNumIn(sessionID);
+        int nextNumOut = messageStoreFactory.getNextNumOut(sessionID);
+
+        shellPrinter.printSequenceNumbers(nextNumIn, nextNumOut);
     }
 
 

@@ -49,6 +49,36 @@ public class DefaultBaseDirFileStoreFactory implements MessageStoreFactory {
         }
     }
 
+    public int getNextNumOut(SessionID sessionID) {
+        FileStore messageStore = (FileStore) fileStoreFactory.create(sessionID);
+        try {
+            return messageStore.getNextSenderMsgSeqNum();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                messageStore.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public int getNextNumIn(SessionID sessionID) {
+        FileStore messageStore = (FileStore) fileStoreFactory.create(sessionID);
+        try {
+            return messageStore.getNextTargetMsgSeqNum();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                messageStore.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public int setNextNumOut(SessionID sessionID, int number) {
         FileStore messageStore = (FileStore) fileStoreFactory.create(sessionID);
         try {

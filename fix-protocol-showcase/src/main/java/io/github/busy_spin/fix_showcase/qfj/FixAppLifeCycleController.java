@@ -14,8 +14,6 @@ public interface FixAppLifeCycleController {
 
     void login(String sessionId);
 
-    void sendOrder(String sessionId);
-
     void printLog(String sessionId);
 
     void setNextNumIn(String sessionId, int number);
@@ -27,4 +25,6 @@ public interface FixAppLifeCycleController {
     void printSessionDetails(String sessionId);
 
     String defaultSession();
+
+    void printSequenceNumbers(String sessionId);
 }

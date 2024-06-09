@@ -76,4 +76,14 @@ public class ShellPrinter {
         System.out.println(tableBuilder.build().render(1000));
     }
 
+    public void printSequenceNumbers(int nextNumIn, int nextNumOut) {
+        ArrayTableModel arrayTableModel = new ArrayTableModel(new String[][]{
+                new String[]{"NextNumOut", String.valueOf(nextNumOut)},
+                new String[]{"NextNumIn", String.valueOf(nextNumIn)}
+        });
+        TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
+                .addFullBorder(BorderStyle.fancy_heavy);
+
+        System.out.println(tableBuilder.build().render(1000));
+    }
 }

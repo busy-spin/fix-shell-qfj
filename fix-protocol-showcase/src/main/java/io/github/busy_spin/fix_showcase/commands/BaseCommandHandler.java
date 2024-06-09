@@ -16,7 +16,7 @@ public abstract class BaseCommandHandler {
         fixAppLifeCycleController = new DefaultFixAppLifeCycleController(appType);
     }
 
-    @Command(command = "start", description = "initialize the initiator application")
+    @Command(command = "start", description = "start fix application")
     public String start() {
         fixAppLifeCycleController.start();
         return "";
@@ -84,10 +84,17 @@ public abstract class BaseCommandHandler {
         return "";
     }
 
-    @Command(command = "stop", description = "Stop initiator")
+    @Command(command = "stop", description = "Stop application and disconnect")
     public String stop() {
         fixAppLifeCycleController.stop();
         return "Initiator stopped";
+    }
+
+    @Command(command = "print-num", description = "Print NextNumIn and NextNumOut")
+    public String printSequenceNumbers(
+            @Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
+        fixAppLifeCycleController.printSequenceNumbers(getProvidedOrDefault(sessionId));
+        return "";
     }
 
 }
