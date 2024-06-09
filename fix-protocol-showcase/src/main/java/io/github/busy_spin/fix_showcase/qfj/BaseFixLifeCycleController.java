@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class BaseFixLifeCycleController implements FixLifeCycleController {
 
-    private SocketInitiator socketInitiator;
+    private Connector connector;
 
     private DefaultBaseDirFileStoreFactory messageStoreFactory;
 
@@ -30,7 +30,7 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
         try {
             sessionSettings = new SessionSettings(FileUtil.open(ShellPrinter.class, "initiator.cfg"));
             messageStoreFactory = new DefaultBaseDirFileStoreFactory(sessionSettings);
-            socketInitiator = new SocketInitiator(
+            connector = new SocketInitiator(
                     new Application(),
                     messageStoreFactory,
                     sessionSettings,
@@ -46,7 +46,7 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
         try {
             startUpLock.lock();
             if (!started) {
-                socketInitiator.start();
+                connector.start();
                 started = true;
             }
         } catch (ConfigError e) {
@@ -61,7 +61,7 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
         try {
             startUpLock.lock();
             if (started) {
-                socketInitiator.stop(true);
+                connector.stop(true);
                 started = false;
             }
         } finally {
@@ -74,10 +74,10 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
         try {
             startUpLock.lock();
             if (started) {
-                socketInitiator.stop(true);
+                connector.stop(true);
                 started = false;
                 try {
-                    socketInitiator.start();
+                    connector.start();
                     started = true;
                 } catch (ConfigError e) {
                     throw new RuntimeException(e);
