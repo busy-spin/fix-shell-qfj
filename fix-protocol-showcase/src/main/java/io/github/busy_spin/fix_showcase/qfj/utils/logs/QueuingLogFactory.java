@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class QueuingLogFactory implements LogFactory {
 
     @Getter
-    private Map<SessionID, QueueLog>  logs = new ConcurrentHashMap<>();
+    private Map<SessionID, QueueLog> logs = new ConcurrentHashMap<>();
 
     @Override
     public Log create(SessionID sessionID) {

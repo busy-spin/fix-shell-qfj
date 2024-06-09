@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BaseFixLifeCycleController implements FixLifeCycleController {
+public class DefaultFixAppLifeCycleController implements FixAppLifeCycleController {
 
     private Connector connector;
 
@@ -24,20 +24,34 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
 
     private volatile boolean started = false;
 
+    public DefaultFixAppLifeCycleController(AppType appType) {
+        init(appType);
+    }
 
-    @Override
-    public void init() {
+    private void init(AppType appType) {
         try {
-            sessionSettings = new SessionSettings(FileUtil.open(ShellPrinter.class, "initiator.cfg"));
-            messageStoreFactory = new DefaultBaseDirFileStoreFactory(sessionSettings);
-            connector = new SocketInitiator(
-                    new Application(),
-                    messageStoreFactory,
-                    sessionSettings,
-                    logFactory,
-                    new DefaultMessageFactory());
+            if (appType == AppType.INITIATOR) {
+                sessionSettings = new SessionSettings(FileUtil.open(ShellPrinter.class, "initiator.cfg"));
+                messageStoreFactory = new DefaultBaseDirFileStoreFactory(sessionSettings);
+                connector = new SocketInitiator(
+                        new Application(),
+                        messageStoreFactory,
+                        sessionSettings,
+                        logFactory,
+                        new DefaultMessageFactory());
+            } else {
+                sessionSettings = new SessionSettings(FileUtil.open(ShellPrinter.class, "acceptor.cfg"));
+                messageStoreFactory = new DefaultBaseDirFileStoreFactory(sessionSettings);
+                connector = new SocketAcceptor(
+                        new Application(),
+                        messageStoreFactory,
+                        sessionSettings,
+                        logFactory,
+                        new DefaultMessageFactory());
+            }
+
         } catch (ConfigError e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -91,7 +105,7 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
     @Override
     public void logout(String sessionId) {
         if (started) {
-            try(Session session = Session.lookupSession(new SessionID(sessionId))) {
+            try (Session session = Session.lookupSession(new SessionID(sessionId))) {
                 session.logout();
                 System.out.println("Logout from session " + sessionId);
             } catch (IOException e) {
@@ -105,7 +119,7 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
     @Override
     public void testRequest(String sessionId, String reqId) {
         if (started) {
-            try(Session session = Session.lookupSession(new SessionID(sessionId))) {
+            try (Session session = Session.lookupSession(new SessionID(sessionId))) {
                 if (reqId == null) {
                     reqId = String.valueOf(System.nanoTime());
                 }
@@ -122,7 +136,7 @@ public class BaseFixLifeCycleController implements FixLifeCycleController {
     @Override
     public void login(String sessionId) {
         if (started) {
-            try(Session session = Session.lookupSession(new SessionID(sessionId))) {
+            try (Session session = Session.lookupSession(new SessionID(sessionId))) {
                 session.logon();
                 System.out.println("Logon to session " + sessionId);
             } catch (IOException e) {

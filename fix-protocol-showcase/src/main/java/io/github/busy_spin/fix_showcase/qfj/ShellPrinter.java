@@ -8,7 +8,8 @@ import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.shell.table.ArrayTableModel;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
-import quickfix.*;
+import quickfix.SessionID;
+import quickfix.SessionSettings;
 
 import java.util.*;
 
