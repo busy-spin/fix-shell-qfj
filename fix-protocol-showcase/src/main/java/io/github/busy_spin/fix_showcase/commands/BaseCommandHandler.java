@@ -4,14 +4,13 @@ import io.github.busy_spin.fix_showcase.qfj.DefaultInitiatorController;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
-@Command(command = "init", group = "QFJ Initiator Control")
-public class InitiatorCommands {
+public class BaseCommandHandler {
 
     private final DefaultInitiatorController defaultInitiatorController = new DefaultInitiatorController();
 
     private String defaultSession;
 
-    public InitiatorCommands() {
+    public BaseCommandHandler() {
         defaultInitiatorController.init();
     }
 

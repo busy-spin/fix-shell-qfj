@@ -1,7 +1,9 @@
 package io.github.busy_spin.fix_showcase;
 
+import io.github.busy_spin.fix_showcase.commands.AcceptorCommandHandler;
 import io.github.busy_spin.fix_showcase.commands.AcceptorCommands;
-import io.github.busy_spin.fix_showcase.commands.InitiatorCommands;
+import io.github.busy_spin.fix_showcase.commands.BaseCommandHandler;
+import io.github.busy_spin.fix_showcase.commands.InitializerCommandHandler;
 import org.jline.utils.AttributedString;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -12,8 +14,8 @@ import org.springframework.shell.jline.PromptProvider;
 
 @SpringBootApplication
 @EnableCommand({
-		InitiatorCommands.class,
-		AcceptorCommands.class
+		InitializerCommandHandler.class,
+		AcceptorCommandHandler.class
 })
 public class FixProtocolShowcaseApplication {
 
