@@ -155,7 +155,7 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
     @Override
     public void setNextNumIn(String sessionId, int number) {
         int currentNextNumIn = messageStoreFactory.setNextNumIn(new SessionID(sessionId), number);
-        shellPrinter.printMessage("Next Num In changed from " + currentNextNumOut + " to " + number);
+        shellPrinter.printMessage("Next Num In changed from " + currentNextNumIn + " to " + number);
     }
 
     @Override
