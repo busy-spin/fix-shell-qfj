@@ -187,6 +187,7 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
     @Override
     public void printSequenceNumbers(String sessionId) {
         SessionID sessionID = new SessionID(sessionId);
+        System.out.println("Session " + sessionID);
         int nextNumIn = messageStoreFactory.getNextNumIn(sessionID);
         int nextNumOut = messageStoreFactory.getNextNumOut(sessionID);
 
