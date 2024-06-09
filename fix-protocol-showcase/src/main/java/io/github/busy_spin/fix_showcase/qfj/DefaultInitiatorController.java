@@ -5,7 +5,6 @@ import io.github.busy_spin.fix_showcase.qfj.utils.store.DefaultBaseDirFileStoreF
 import quickfix.*;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 

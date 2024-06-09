@@ -25,11 +25,6 @@ public class FixProtocolShowcaseApplication {
 
 	@Bean
 	public PromptProvider myPromptProvider() {
-		return new PromptProvider() {
-			@Override
-			public AttributedString getPrompt() {
-				return new AttributedString("fix-shell>");
-			}
-		};
+		return () -> new AttributedString("fix-shell>");
 	}
 }

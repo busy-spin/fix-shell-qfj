@@ -80,7 +80,7 @@ public class InitiatorCommands {
         return "";
     }
 
-    @Command(command = "session-details", description = "Set next number in")
+    @Command(command = "session-details", description = "Print session details")
     public String sessionDetails(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
         sessionId = getProvidedOrDefault(sessionId);
         if (sessionId != null) {

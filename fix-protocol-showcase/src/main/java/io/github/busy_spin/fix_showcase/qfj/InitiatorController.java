@@ -1,7 +1,5 @@
 package io.github.busy_spin.fix_showcase.qfj;
 
-import java.util.List;
-
 public interface InitiatorController {
     void init();
 
