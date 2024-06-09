@@ -1,6 +1,7 @@
 package io.github.busy_spin.fix_showcase;
 
 import io.github.busy_spin.fix_showcase.commands.AcceptorCommandHandler;
+import io.github.busy_spin.fix_showcase.commands.ColorTestCommandHandler;
 import io.github.busy_spin.fix_showcase.commands.InitializerCommandHandler;
 import org.jline.utils.AttributedString;
 import org.springframework.boot.Banner;
@@ -13,7 +14,8 @@ import org.springframework.shell.jline.PromptProvider;
 @SpringBootApplication
 @EnableCommand({
         InitializerCommandHandler.class,
-        AcceptorCommandHandler.class
+        AcceptorCommandHandler.class,
+        ColorTestCommandHandler.class
 })
 public class FixProtocolShowcaseApplication {
 
