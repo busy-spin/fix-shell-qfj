@@ -4,8 +4,6 @@ import quickfix.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import static quickfix.FileStoreFactory.SETTING_FILE_STORE_PATH;
 
@@ -13,9 +11,6 @@ public class DefaultBaseDirFileStoreFactory implements MessageStoreFactory {
 
     private final FileStoreFactory fileStoreFactory;
 
-    private final SessionSettings settings;
-
-    private final Map<SessionID, MessageStore> messageStoreMap = new HashMap<>();
 
     public DefaultBaseDirFileStoreFactory(SessionSettings settings) {
         String baseDir = System.getProperty("user.home");
@@ -27,16 +22,13 @@ public class DefaultBaseDirFileStoreFactory implements MessageStoreFactory {
             throw new RuntimeException("No default location for file store.");
         }
         String storePath = Paths.get(baseDir, ".qfj-fix-shell").toString();
-        this.settings = settings;
         settings.setString(SETTING_FILE_STORE_PATH, storePath);
         fileStoreFactory = new FileStoreFactory(settings);
     }
 
     @Override
     public MessageStore create(SessionID sessionID) {
-        MessageStore messageStore = fileStoreFactory.create(sessionID);
-        messageStoreMap.put(sessionID, messageStore);
-        return messageStore;
+        return fileStoreFactory.create(sessionID);
     }
 
     public int setNextNumIn(SessionID sessionID, int number) {
