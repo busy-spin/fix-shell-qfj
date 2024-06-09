@@ -4,8 +4,6 @@ import io.github.busy_spin.fix_showcase.qfj.DefaultInitiatorController;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 @Command(command = "init", group = "QFJ Initiator Control")
 public class InitiatorCommands {
 
@@ -58,8 +56,22 @@ public class InitiatorCommands {
 
     @Command(command = "logout", description = "logout from session")
     public String stop(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
-        defaultInitiatorController.logout(sessionId);
+        defaultInitiatorController.logout(getProvidedOrDefault(sessionId));
         return "Logout";
+    }
+
+    @Command(command = "num-in", description = "Set next number in")
+    public String setNextNumIn(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId,
+                               @Option(longNames = "number", shortNames = {'n'}, required = true) int number) {
+        defaultInitiatorController.setNextNumIn(getProvidedOrDefault(sessionId), number);
+        return "";
+    }
+
+    @Command(command = "num-out", description = "Set next number in")
+    public String setNextNumOut(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId,
+                               @Option(longNames = "number", shortNames = {'n'}, required = true) int number) {
+        defaultInitiatorController.setNextNumOut(getProvidedOrDefault(sessionId), number);
+        return "";
     }
 
     @Command(command = "stop", description = "Stop initiator")

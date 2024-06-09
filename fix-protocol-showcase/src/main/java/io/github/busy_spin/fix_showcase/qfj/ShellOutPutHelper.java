@@ -80,13 +80,19 @@ public class ShellOutPutHelper {
         }
     }
 
-    public void printSessions(Connector connector) {
-        List<String[]> sessions = connector.getSessions().stream().map(id -> new String[]{id.toString()}).toList();
-        ArrayTableModel arrayTableModel = new ArrayTableModel(sessions.toArray(new String[0][0]));
-        TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
-                .addFullBorder(BorderStyle.fancy_heavy);
+    public void printSessions(SessionSettings settings) {
+        ArrayList<String[]> sessions = new ArrayList<>();
+        settings.sectionIterator().forEachRemaining(id -> sessions.add(new String[]{id.toString()}));
+        if (sessions.isEmpty()) {
+            System.out.println("No sessions found");
+        } else {
+            ArrayTableModel arrayTableModel = new ArrayTableModel(sessions.toArray(new String[0][0]));
+            TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
+                    .addFullBorder(BorderStyle.fancy_heavy);
 
-        System.out.println(tableBuilder.build().render(1000));
+            System.out.println(tableBuilder.build().render(1000));
+        }
+
     }
 
 }

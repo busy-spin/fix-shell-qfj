@@ -38,33 +38,38 @@ public class DefaultBaseDirFileStoreFactory implements MessageStoreFactory {
     }
 
     public int setNextNumIn(SessionID sessionID, int number) {
-        MessageStore messageStore = messageStoreMap.get(sessionID);
-        if (messageStore != null) {
-            try {
-                int previousNumber = messageStore.getNextTargetMsgSeqNum();
-                messageStore.setNextTargetMsgSeqNum(number);
+        FileStore messageStore = (FileStore) fileStoreFactory.create(sessionID);
+        try {
+            int previousNumber = messageStore.getNextTargetMsgSeqNum();
+            messageStore.setNextTargetMsgSeqNum(number);
 
-                return previousNumber;
+            return previousNumber;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                messageStore.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            throw new RuntimeException("Message store not found for session");
         }
     }
 
     public int setNextNumOut(SessionID sessionID, int number) {
-        MessageStore messageStore = messageStoreMap.get(sessionID);
-        if (messageStore != null) {
+        FileStore messageStore = (FileStore) fileStoreFactory.create(sessionID);
+        try {
+            int previousNumber = messageStore.getNextTargetMsgSeqNum();
+            messageStore.setNextTargetMsgSeqNum(number);
+
+            return previousNumber;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
             try {
-                int previousNumber = messageStore.getNextSenderMsgSeqNum();
-                messageStore.setNextSenderMsgSeqNum(number);
-                return previousNumber;
+                messageStore.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            throw new RuntimeException("Message store not found for session");
         }
     }
 }

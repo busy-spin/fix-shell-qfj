@@ -20,14 +20,15 @@ public class DefaultInitiatorController implements InitiatorController {
 
     private ShellOutPutHelper shellOutPutHelper = new ShellOutPutHelper();
 
+    private SessionSettings sessionSettings;
+
     private volatile boolean started = false;
 
 
     @Override
     public void init() {
         try {
-            SessionSettings sessionSettings =
-                    new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "initiator.cfg"));
+            sessionSettings = new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "initiator.cfg"));
             messageStoreFactory = new DefaultBaseDirFileStoreFactory(sessionSettings);
             socketInitiator = new SocketInitiator(
                     new Application(),
@@ -156,7 +157,7 @@ public class DefaultInitiatorController implements InitiatorController {
 
     @Override
     public void printSessionIds() {
-        shellOutPutHelper.printSessions(socketInitiator);
+        shellOutPutHelper.printSessions(sessionSettings);
     }
 
 
