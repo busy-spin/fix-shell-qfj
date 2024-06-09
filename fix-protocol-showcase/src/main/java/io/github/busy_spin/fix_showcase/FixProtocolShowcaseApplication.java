@@ -1,8 +1,6 @@
 package io.github.busy_spin.fix_showcase;
 
 import io.github.busy_spin.fix_showcase.commands.AcceptorCommandHandler;
-import io.github.busy_spin.fix_showcase.commands.AcceptorCommands;
-import io.github.busy_spin.fix_showcase.commands.BaseCommandHandler;
 import io.github.busy_spin.fix_showcase.commands.InitializerCommandHandler;
 import org.jline.utils.AttributedString;
 import org.springframework.boot.Banner;

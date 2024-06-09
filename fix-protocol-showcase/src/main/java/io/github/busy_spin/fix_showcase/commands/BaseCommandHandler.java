@@ -1,12 +1,12 @@
 package io.github.busy_spin.fix_showcase.commands;
 
-import io.github.busy_spin.fix_showcase.qfj.DefaultInitiatorController;
+import io.github.busy_spin.fix_showcase.qfj.BaseFixLifeCycleController;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
 
 public class BaseCommandHandler {
 
-    private final DefaultInitiatorController defaultInitiatorController = new DefaultInitiatorController();
+    private final BaseFixLifeCycleController defaultInitiatorController = new BaseFixLifeCycleController();
 
     private String defaultSession;
 

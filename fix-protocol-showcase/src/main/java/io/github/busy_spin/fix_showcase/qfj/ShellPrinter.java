@@ -1,10 +1,8 @@
 package io.github.busy_spin.fix_showcase.qfj;
 
 import io.github.busy_spin.fix_showcase.qfj.utils.logs.LogElement;
-import io.github.busy_spin.fix_showcase.qfj.utils.logs.NoopLogFactory;
 import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueueLog;
 import io.github.busy_spin.fix_showcase.qfj.utils.logs.QueuingLogFactory;
-import lombok.Getter;
 import org.springframework.boot.ansi.AnsiColor;
 import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.shell.table.ArrayTableModel;
@@ -14,51 +12,14 @@ import quickfix.*;
 
 import java.util.*;
 
-public class ShellOutPutHelper {
+public class ShellPrinter {
 
-    @Getter
-    private QueuingLogFactory logFactory = new QueuingLogFactory();
-
-    public boolean start() {
-        try {
-            SessionSettings sessionSettings =
-                    new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "initiator.cfg"));
-            SocketInitiator socketInitiator = new SocketInitiator(
-                    new Application(),
-                    new NoopStoreFactory(),
-                    sessionSettings,
-                    new NoopLogFactory(),
-                    new DefaultMessageFactory());
-            socketInitiator.start();
-            return true;
-        } catch (ConfigError e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean startAcceptor() {
-        try {
-            SessionSettings sessionSettings =
-                    new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "acceptor.cfg"));
-            SocketAcceptor socketAcceptor = new SocketAcceptor(
-                    new Application(),
-                    new NoopStoreFactory(),
-                    sessionSettings,
-                    logFactory,
-                    new DefaultMessageFactory());
-            socketAcceptor.start();
-            return true;
-        } catch (ConfigError e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public void printLogs(QueuingLogFactory logFactory) {
         Map<SessionID, QueueLog> sessionLogs = logFactory.getLogs();
         for (SessionID sessionID : sessionLogs.keySet()) {
-            AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "Session ID" + sessionID.toString(), AnsiColor.DEFAULT);
+            AnsiOutput.toString(AnsiColor.BRIGHT_BLUE,
+                    "Session ID" + sessionID.toString(), AnsiColor.DEFAULT);
             System.out.println("Session ID " + sessionID);
             List<String[]> rows = new ArrayList<>();
             rows.add(new String[]{"Event", "Message"});

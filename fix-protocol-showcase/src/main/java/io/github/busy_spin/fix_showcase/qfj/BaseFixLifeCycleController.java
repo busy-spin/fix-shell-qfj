@@ -8,17 +8,17 @@ import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class DefaultInitiatorController implements InitiatorController {
+public class BaseFixLifeCycleController implements FixLifeCycleController {
 
     private SocketInitiator socketInitiator;
 
     private DefaultBaseDirFileStoreFactory messageStoreFactory;
 
-    private Lock initiatorLock = new ReentrantLock();
+    private Lock startUpLock = new ReentrantLock();
 
     private QueuingLogFactory logFactory = new QueuingLogFactory();
 
-    private ShellOutPutHelper shellOutPutHelper = new ShellOutPutHelper();
+    private ShellPrinter shellPrinter = new ShellPrinter();
 
     private SessionSettings sessionSettings;
 
@@ -28,7 +28,7 @@ public class DefaultInitiatorController implements InitiatorController {
     @Override
     public void init() {
         try {
-            sessionSettings = new SessionSettings(FileUtil.open(ShellOutPutHelper.class, "initiator.cfg"));
+            sessionSettings = new SessionSettings(FileUtil.open(ShellPrinter.class, "initiator.cfg"));
             messageStoreFactory = new DefaultBaseDirFileStoreFactory(sessionSettings);
             socketInitiator = new SocketInitiator(
                     new Application(),
@@ -44,7 +44,7 @@ public class DefaultInitiatorController implements InitiatorController {
     @Override
     public void start() {
         try {
-            initiatorLock.lock();
+            startUpLock.lock();
             if (!started) {
                 socketInitiator.start();
                 started = true;
@@ -52,27 +52,27 @@ public class DefaultInitiatorController implements InitiatorController {
         } catch (ConfigError e) {
             e.printStackTrace();
         } finally {
-            initiatorLock.unlock();
+            startUpLock.unlock();
         }
     }
 
     @Override
     public void stop() {
         try {
-            initiatorLock.lock();
+            startUpLock.lock();
             if (started) {
                 socketInitiator.stop(true);
                 started = false;
             }
         } finally {
-            initiatorLock.unlock();
+            startUpLock.unlock();
         }
     }
 
     @Override
     public void restart() {
         try {
-            initiatorLock.lock();
+            startUpLock.lock();
             if (started) {
                 socketInitiator.stop(true);
                 started = false;
@@ -84,7 +84,7 @@ public class DefaultInitiatorController implements InitiatorController {
                 }
             }
         } finally {
-            initiatorLock.unlock();
+            startUpLock.unlock();
         }
     }
 
@@ -140,7 +140,7 @@ public class DefaultInitiatorController implements InitiatorController {
 
     @Override
     public void printLog(String sessionId) {
-        shellOutPutHelper.printLogs(logFactory);
+        shellPrinter.printLogs(logFactory);
     }
 
     @Override
@@ -157,13 +157,13 @@ public class DefaultInitiatorController implements InitiatorController {
 
     @Override
     public void printSessionIds() {
-        shellOutPutHelper.printSessions(sessionSettings);
+        shellPrinter.printSessions(sessionSettings);
     }
 
     @Override
     public void printSessionDetails(String sessionId) {
         try {
-            shellOutPutHelper.printSessionDetails(sessionSettings, sessionId);
+            shellPrinter.printSessionDetails(sessionSettings, sessionId);
         } catch (Exception e) {
             System.out.println("Error occurred while reading session config");
             throw new RuntimeException(e);

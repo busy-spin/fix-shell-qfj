@@ -1,6 +1,6 @@
 package io.github.busy_spin.fix_showcase.qfj;
 
-public interface InitiatorController {
+public interface FixLifeCycleController {
     void init();
 
     void start();
