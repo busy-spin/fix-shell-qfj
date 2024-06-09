@@ -23,7 +23,7 @@ public class ShellPrinter {
                     "Session ID" + sessionID.toString(), AnsiColor.DEFAULT);
             System.out.println("Session ID " + sessionID);
             List<String[]> rows = new ArrayList<>();
-            rows.add(new String[]{"Event", "Message"});
+            rows.add(new String[]{"Type", "Message"});
 
             QueueLog queueLog = sessionLogs.get(sessionID);
             for (Object obj : queueLog.getQueue().toArray()) {
