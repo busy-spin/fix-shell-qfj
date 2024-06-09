@@ -12,9 +12,12 @@ public class InitiatorCommands {
     private String defaultSession;
 
 
-    public InitiatorCommands() {
+    @Command(command = "start", description = "initialize the initiator application")
+    public String init() {
         defaultInitiatorController.init();
+        return "";
     }
+
 
     @Command(command = "start", description = "initialize the initiator application")
     public String start() {
@@ -49,6 +52,9 @@ public class InitiatorCommands {
 
     private String getProvidedOrDefault(String sessionId) {
         if (sessionId == null) {
+            if (defaultSession == null) {
+                defaultSession = defaultInitiatorController.defaultSession();
+            }
             sessionId = defaultSession;
         }
         return sessionId;
@@ -71,6 +77,15 @@ public class InitiatorCommands {
     public String setNextNumOut(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId,
                                @Option(longNames = "number", shortNames = {'n'}, required = true) int number) {
         defaultInitiatorController.setNextNumOut(getProvidedOrDefault(sessionId), number);
+        return "";
+    }
+
+    @Command(command = "session-details", description = "Set next number in")
+    public String sessionDetails(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
+        sessionId = getProvidedOrDefault(sessionId);
+        if (sessionId != null) {
+            defaultInitiatorController.printSessionDetails(sessionId);
+        }
         return "";
     }
 

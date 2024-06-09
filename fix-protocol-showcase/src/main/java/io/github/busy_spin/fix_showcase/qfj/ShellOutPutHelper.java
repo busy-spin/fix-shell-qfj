@@ -11,10 +11,9 @@ import org.springframework.shell.table.ArrayTableModel;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import quickfix.*;
+import quickfix.Dictionary;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShellOutPutHelper {
@@ -93,6 +92,22 @@ public class ShellOutPutHelper {
             System.out.println(tableBuilder.build().render(1000));
         }
 
+    }
+
+    public void printSessionDetails(SessionSettings settings, String sessionId) throws Exception {
+
+        Properties properties = settings.getSessionProperties(new SessionID(sessionId));
+        ArrayList<String[]> sessionDetails = new ArrayList<>();
+
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            sessionDetails.add(new String[]{entry.getKey().toString(), entry.getValue().toString()});
+        }
+
+        ArrayTableModel arrayTableModel = new ArrayTableModel(sessionDetails.toArray(new String[0][0]));
+        TableBuilder tableBuilder = new TableBuilder(arrayTableModel)
+                .addFullBorder(BorderStyle.fancy_heavy);
+
+        System.out.println(tableBuilder.build().render(1000));
     }
 
 }

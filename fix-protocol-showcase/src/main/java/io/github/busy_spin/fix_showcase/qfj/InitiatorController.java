@@ -26,4 +26,8 @@ public interface InitiatorController {
     void setNextNumOut(String sessionId, int number);
 
     void printSessionIds();
+
+    void printSessionDetails(String sessionId);
+
+    String defaultSession();
 }

@@ -5,6 +5,7 @@ import io.github.busy_spin.fix_showcase.qfj.utils.store.DefaultBaseDirFileStoreF
 import quickfix.*;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -46,8 +47,11 @@ public class DefaultInitiatorController implements InitiatorController {
         try {
             initiatorLock.lock();
             if (!started) {
-                started = true;
+                if (socketInitiator == null) {
+                    init();
+                }
                 socketInitiator.start();
+                started = true;
             }
         } catch (ConfigError e) {
             e.printStackTrace();
@@ -80,7 +84,7 @@ public class DefaultInitiatorController implements InitiatorController {
                     socketInitiator.start();
                     started = true;
                 } catch (ConfigError e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         } finally {
@@ -158,6 +162,22 @@ public class DefaultInitiatorController implements InitiatorController {
     @Override
     public void printSessionIds() {
         shellOutPutHelper.printSessions(sessionSettings);
+    }
+
+    @Override
+    public void printSessionDetails(String sessionId) {
+        try {
+            shellOutPutHelper.printSessionDetails(sessionSettings, sessionId);
+        } catch (Exception e) {
+            System.out.println("Error occurred while reading session config");
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public String defaultSession() {
+        return sessionSettings.sectionIterator().next().toString();
     }
 
 
