@@ -13,7 +13,7 @@ public interface InitiatorController {
 
     void logout(String sessionId);
 
-    void testRequest(String sessionId);
+    void testRequest(String sessionId, String reqId);
 
     void login(String sessionId);
 

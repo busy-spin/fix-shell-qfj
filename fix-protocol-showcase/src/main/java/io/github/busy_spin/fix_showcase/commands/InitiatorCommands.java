@@ -13,7 +13,6 @@ public class InitiatorCommands {
 
     private String defaultSession;
 
-    private AtomicBoolean running = new AtomicBoolean(false);
 
     public InitiatorCommands() {
         defaultInitiatorController.init();
@@ -21,9 +20,8 @@ public class InitiatorCommands {
 
     @Command(command = "start", description = "initialize the initiator application")
     public String start() {
-        running.set(true);
         defaultInitiatorController.start();
-        return "Initiator started";
+        return "";
     }
 
     @Command(command = "list", description = "list fix sessions")
@@ -36,39 +34,36 @@ public class InitiatorCommands {
     public String defaultSession(@Option(longNames = "session-id", shortNames = {'s'}, required = true)
                                      String sessionId) {
         defaultSession = sessionId;
-        return "Default session set";
+        return "Default session set to " + sessionId;
     }
 
     @Command(command = "log", description = "log events, incoming & outgoing messages")
     public String log(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
-        if (sessionId == null) {
-            sessionId = defaultSession;
-        }
+        sessionId = getProvidedOrDefault(sessionId);
 
         if (sessionId != null) {
             defaultInitiatorController.printLog(sessionId);
-            return "END LOG";
+            return "";
         } else {
             return "Session id not set";
         }
     }
 
+    private String getProvidedOrDefault(String sessionId) {
+        if (sessionId == null) {
+            sessionId = defaultSession;
+        }
+        return sessionId;
+    }
+
     @Command(command = "logout", description = "logout from session")
     public String stop(@Option(longNames = "session-id", shortNames = {'s'}, required = false) String sessionId) {
-        if (!running.get()) {
-            return "Initiator is not running";
-        }
-
         defaultInitiatorController.logout(sessionId);
         return "Logout";
     }
 
     @Command(command = "stop", description = "Stop initiator")
     public String stop() {
-        if (!running.get()) {
-            return "Initiator is not running";
-        }
-
         defaultInitiatorController.stop();
         return "Initiator stopped";
     }

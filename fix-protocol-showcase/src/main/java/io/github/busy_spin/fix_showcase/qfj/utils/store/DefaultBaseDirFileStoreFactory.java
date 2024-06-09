@@ -3,7 +3,6 @@ package io.github.busy_spin.fix_showcase.qfj.utils.store;
 import quickfix.*;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,25 +37,34 @@ public class DefaultBaseDirFileStoreFactory implements MessageStoreFactory {
         return messageStore;
     }
 
-    public void setNextNumIn(SessionID sessionID, int number) {
+    public int setNextNumIn(SessionID sessionID, int number) {
         MessageStore messageStore = messageStoreMap.get(sessionID);
         if (messageStore != null) {
             try {
+                int previousNumber = messageStore.getNextTargetMsgSeqNum();
                 messageStore.setNextTargetMsgSeqNum(number);
+
+                return previousNumber;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            throw new RuntimeException("Message store not found for session");
         }
     }
 
-    public void setNextNumOut(SessionID sessionID, int number) {
+    public int setNextNumOut(SessionID sessionID, int number) {
         MessageStore messageStore = messageStoreMap.get(sessionID);
         if (messageStore != null) {
             try {
+                int previousNumber = messageStore.getNextSenderMsgSeqNum();
                 messageStore.setNextSenderMsgSeqNum(number);
+                return previousNumber;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            throw new RuntimeException("Message store not found for session");
         }
     }
 }
