@@ -47,7 +47,7 @@ public abstract class BaseCommandHandler {
         }
     }
 
-    private String getProvidedOrDefault(String sessionId) {
+    protected String getProvidedOrDefault(String sessionId) {
         if (sessionId == null) {
             if (defaultSession == null) {
                 defaultSession = fixAppLifeCycleController.defaultSession();
