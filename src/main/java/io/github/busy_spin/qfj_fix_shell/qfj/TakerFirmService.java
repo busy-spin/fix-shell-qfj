@@ -6,7 +6,7 @@ import quickfix.SessionNotFound;
 import quickfix.field.*;
 import quickfix.fix44.NewOrderSingle;
 
-public class TraderService {
+public class TakerFirmService {
 
     public void sendOrder(String sessionId) throws SessionNotFound {
         SessionID sessionID = new SessionID(sessionId);
