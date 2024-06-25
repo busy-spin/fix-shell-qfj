@@ -190,6 +190,7 @@ public class DefaultFixAppLifeCycleController implements FixAppLifeCycleControll
         int nextNumIn = messageStoreFactory.getNextNumIn(sessionID);
         int nextNumOut = messageStoreFactory.getNextNumOut(sessionID);
 
+        shellPrinter.printMessage(sessionId);
         shellPrinter.printSequenceNumbers(nextNumIn, nextNumOut, sessionID);
     }
 
