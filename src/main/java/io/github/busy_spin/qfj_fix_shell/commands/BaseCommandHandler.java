@@ -9,11 +9,13 @@ import org.springframework.shell.command.annotation.Option;
 public abstract class BaseCommandHandler {
 
     private final FixAppLifeCycleController fixAppLifeCycleController;
+    private final AppType appType;
 
     private String defaultSession;
 
     public BaseCommandHandler(AppType appType) {
         fixAppLifeCycleController = new DefaultFixAppLifeCycleController(appType);
+        this.appType = appType;
     }
 
     @Command(command = "start", description = "start fix application")
@@ -87,7 +89,11 @@ public abstract class BaseCommandHandler {
     @Command(command = "stop", description = "Stop application and disconnect")
     public String stop() {
         fixAppLifeCycleController.stop();
-        return "Initiator stopped";
+        String messagePrefix = "Initiator";
+        if (appType == AppType.ACCEPTOR) {
+            messagePrefix = "Acceptor";
+        }
+        return messagePrefix + " stopped";
     }
 
     @Command(command = "print-num", description = "Print NextNumIn and NextNumOut")
